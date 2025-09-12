@@ -5,8 +5,8 @@ import {
 	DialogTitle,
 	Divider,
 } from "@mui/material";
-import type { PatientFormValues } from "../../types.ts";
-import { AddPatientForm } from "./AddPatientForm.tsx";
+import type { PatientFormValues } from "../lib/types.ts";
+import { AddPatientForm } from "./add-patient-form.tsx";
 
 export function AddPatientModal({
 	isOpen,

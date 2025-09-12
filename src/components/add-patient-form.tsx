@@ -7,9 +7,7 @@ import {
 	TextField,
 } from "@mui/material";
 import type { FormEvent } from "react";
-import { Gender, type Patient } from "../../types.ts";
-
-type PatientFormValues = Omit<Patient, "id" | "entries">;
+import { Gender, type PatientFormValues } from "../lib/types.ts";
 
 export function AddPatientForm({
 	onCancel,
