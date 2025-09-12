@@ -33,7 +33,7 @@ export function App() {
 							element={
 								<PatientListPage
 									patients={patients}
-									setPatients={setPatients}
+									onAddPatient={setPatients}
 								/>
 							}
 						/>

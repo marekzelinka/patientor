@@ -7,17 +7,9 @@ import {
 	TextField,
 } from "@mui/material";
 import type { FormEvent } from "react";
-import { Gender, type PatientFormValues } from "../../types.ts";
+import { Gender, type Patient } from "../../types.ts";
 
-interface GenderOption {
-	value: Gender;
-	label: string;
-}
-
-const genderOptions: GenderOption[] = Object.values(Gender).map((v) => ({
-	value: v,
-	label: v.toString(),
-}));
+type PatientFormValues = Omit<Patient, "id" | "entries">;
 
 export function AddPatientForm({
 	onCancel,
@@ -56,43 +48,42 @@ export function AddPatientForm({
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
-				<TextField label="Name" fullWidth name="name" />
-				<TextField label="Social security number" fullWidth name="ssn" />
+				<TextField name="name" label="Name" fullWidth />
+				<TextField name="ssn" label="Social security number" fullWidth />
 				<TextField
+					name="dateOfBirth"
 					label="Date of birth"
 					placeholder="YYYY-MM-DD"
 					fullWidth
-					name="dateOfBirth"
 				/>
-				<TextField label="Occupation" fullWidth name="occupation" />
-
+				<TextField name="occupation" label="Occupation" fullWidth />
 				<InputLabel style={{ marginTop: 20 }}>Gender</InputLabel>
-				<Select label="Gender" fullWidth name="gender">
-					{genderOptions.map((option) => (
-						<MenuItem key={option.label} value={option.value}>
-							{option.label}
+				<Select label="Gender" fullWidth name="gender" defaultValue="other">
+					{Object.entries(Gender).map(([label, value]) => (
+						<MenuItem key={value} value={value}>
+							{label}
 						</MenuItem>
 					))}
 				</Select>
 				<Grid>
 					<Grid item>
 						<Button
-							color="secondary"
-							variant="contained"
-							style={{ float: "left" }}
 							type="button"
 							onClick={onCancel}
+							style={{ float: "left" }}
+							color="secondary"
+							variant="contained"
 						>
 							Cancel
 						</Button>
 					</Grid>
 					<Grid item>
 						<Button
+							type="submit"
+							variant="contained"
 							style={{
 								float: "right",
 							}}
-							type="submit"
-							variant="contained"
 						>
 							Add
 						</Button>

@@ -9,18 +9,18 @@ import type { PatientFormValues } from "../../types.ts";
 import { AddPatientForm } from "./AddPatientForm.tsx";
 
 export function AddPatientModal({
-	modalOpen,
+	isOpen,
 	onClose,
 	onSubmit,
 	error,
 }: {
-	modalOpen: boolean;
+	isOpen: boolean;
 	onClose: () => void;
 	onSubmit: (values: PatientFormValues) => void;
 	error?: string | undefined;
 }) {
 	return (
-		<Dialog fullWidth open={modalOpen} onClose={onClose}>
+		<Dialog fullWidth open={isOpen} onClose={onClose}>
 			<DialogTitle>Add a new patient</DialogTitle>
 			<Divider />
 			<DialogContent>

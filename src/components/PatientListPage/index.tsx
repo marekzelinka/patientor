@@ -9,7 +9,7 @@ import {
 	Typography,
 } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
+import { type Dispatch, type SetStateAction, useState } from "react";
 import { patientService } from "../../services/patients.ts";
 import type { Patient, PatientFormValues } from "../../types.ts";
 import { AddPatientModal } from "../AddPatientModal/index.tsx";
@@ -17,18 +17,20 @@ import { HealthRatingBar } from "../HealthRatingBar.tsx";
 
 export function PatientListPage({
 	patients,
-	setPatients,
+	onAddPatient,
 }: {
 	patients: Patient[];
-	setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
+	onAddPatient: Dispatch<SetStateAction<Patient[]>>;
 }) {
-	const [modalOpen, setModalOpen] = useState<boolean>(false);
+	const [modalOpen, setModalOpen] = useState(false);
 	const [addPatientErrorMessage, setAddPatientErrorMessage] =
 		useState<string>();
 
-	const openModal = (): void => setModalOpen(true);
+	const openModal = () => {
+		return setModalOpen(true);
+	};
 
-	const closeModal = (): void => {
+	const closeModal = () => {
 		setModalOpen(false);
 		setAddPatientErrorMessage(undefined);
 	};
@@ -37,7 +39,7 @@ export function PatientListPage({
 		try {
 			const patient = await patientService.create(values);
 
-			setPatients(patients.concat(patient));
+			onAddPatient(patients.concat(patient));
 			setModalOpen(false);
 		} catch (event) {
 			if (axios.isAxiosError(event)) {
@@ -91,12 +93,12 @@ export function PatientListPage({
 				</TableBody>
 			</Table>
 			<AddPatientModal
-				modalOpen={modalOpen}
+				isOpen={modalOpen}
 				onSubmit={addPatient}
 				error={addPatientErrorMessage}
 				onClose={closeModal}
 			/>
-			<Button variant="contained" onClick={() => openModal()}>
+			<Button type="button" onClick={openModal} variant="contained">
 				Add New Patient
 			</Button>
 		</div>
