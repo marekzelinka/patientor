@@ -2,6 +2,7 @@ import { Female, Male, QuestionMark } from "@mui/icons-material";
 import { Box, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { EntryDetails } from "../components/entry-details";
 import type { Diagnosis, Patient } from "../lib/types";
 import { diagnosisService } from "../services/diagnoses";
 import { patientService } from "../services/patients";
@@ -46,23 +47,7 @@ export function PatientPage() {
 			<Stack spacing={2}>
 				<Typography fontWeight="600">Entries</Typography>
 				{patient?.entries?.map((entry) => (
-					<Stack key={entry.id}>
-						<Box>
-							{entry.date} {entry.description}
-						</Box>
-						<ul>
-							{entry.diagnosisCodes?.map((diagnosisCode) => {
-								const diagnose = diagnoses?.find(
-									(diagnose) => diagnose.code === diagnosisCode,
-								);
-								return (
-									<li key={diagnosisCode}>
-										{diagnosisCode} {diagnose?.name}
-									</li>
-								);
-							})}
-						</ul>
-					</Stack>
+					<EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
 				))}
 			</Stack>
 		</Stack>
