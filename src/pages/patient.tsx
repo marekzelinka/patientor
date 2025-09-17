@@ -1,5 +1,5 @@
 import { Female, Male, QuestionMark } from "@mui/icons-material";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { EntryDetails } from "../components/entry-details";
@@ -49,6 +49,11 @@ export function PatientPage() {
 				{patient?.entries?.map((entry) => (
 					<EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
 				))}
+				<Box>
+					<Button variant="contained" color="primary">
+						Add new entry
+					</Button>
+				</Box>
 			</Stack>
 		</Stack>
 	);
