@@ -5,15 +5,17 @@ import {
 	DialogTitle,
 	Divider,
 } from "@mui/material";
-import type { EntryFormValues } from "../lib/types.ts";
+import type { Diagnosis, EntryFormValues } from "../lib/types.ts";
 import { AddEntryForm } from "./add-entry-form.tsx";
 
 export function AddEntryModal({
+	diagnoses,
 	isOpen,
 	onClose,
 	onSubmit,
 	error,
 }: {
+	diagnoses: Diagnosis[];
 	isOpen: boolean;
 	onClose: () => void;
 	onSubmit: (values: EntryFormValues) => void;
@@ -25,7 +27,11 @@ export function AddEntryModal({
 			<Divider />
 			<DialogContent>
 				{error ? <Alert severity="error">{error}</Alert> : null}
-				<AddEntryForm onSubmit={onSubmit} onCancel={onClose} />
+				<AddEntryForm
+					diagnoses={diagnoses}
+					onSubmit={onSubmit}
+					onCancel={onClose}
+				/>
 			</DialogContent>
 		</Dialog>
 	);

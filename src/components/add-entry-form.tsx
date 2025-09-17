@@ -9,16 +9,27 @@ import {
 } from "@mui/material";
 import type { FormEvent } from "react";
 import { useState } from "react";
-import { type EntryFormValues, EntryType } from "../lib/types.ts";
+import {
+	type Diagnosis,
+	type EntryFormValues,
+	EntryType,
+	HealthCheckRating,
+} from "../lib/types.ts";
 
 export function AddEntryForm({
+	diagnoses,
 	onCancel,
 	onSubmit,
 }: {
+	diagnoses: Diagnosis[];
 	onCancel: () => void;
 	onSubmit: (values: EntryFormValues) => void;
 }) {
 	const [entryType, setEntryType] = useState<EntryType>(EntryType.HealthCheck);
+
+	const [selectedDiagnoses, setSelectedDiagnoses] = useState<
+		Diagnosis["code"][]
+	>([]);
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -35,9 +46,13 @@ export function AddEntryForm({
 					description: String(formData.get("description")),
 					date: String(formData.get("date")),
 					specialist: String(formData.get("specialist")),
-					diagnosisCodes: String(formData.get("diagnosisCodes")).split(", "),
 					healthCheckRating: Number(formData.get("healthCheckRating")),
 				};
+
+				if (selectedDiagnoses.length > 0) {
+					newEntry.diagnosisCodes = selectedDiagnoses;
+				}
+
 				break;
 			}
 			case "Hospital": {
@@ -51,12 +66,9 @@ export function AddEntryForm({
 						criteria: String(formData.get("criteria")),
 					},
 				};
-				const diagnosisCodes = String(formData.get("diagnosisCodes")).split(
-					", ",
-				);
 
-				if (diagnosisCodes.length > 0) {
-					newEntry.diagnosisCodes = diagnosisCodes;
+				if (selectedDiagnoses.length > 0) {
+					newEntry.diagnosisCodes = selectedDiagnoses;
 				}
 
 				break;
@@ -67,13 +79,17 @@ export function AddEntryForm({
 					description: String(formData.get("description")),
 					date: String(formData.get("date")),
 					specialist: String(formData.get("specialist")),
-					diagnosisCodes: String(formData.get("diagnosisCodes")).split(", "),
 					employerName: String(formData.get("employerName")),
 					sickLeave: {
 						startDate: String(formData.get("startDate")),
 						endDate: String(formData.get("endDate")),
 					},
 				};
+
+				if (selectedDiagnoses.length > 0) {
+					newEntry.diagnosisCodes = selectedDiagnoses;
+				}
+
 				break;
 			}
 		}
@@ -88,17 +104,35 @@ export function AddEntryForm({
 					<Stack spacing={1}>
 						<TextField name="description" label="Description" fullWidth />
 						<TextField
+							type="date"
 							name="date"
 							label="Date"
 							placeholder="YYYY-MM-DD"
 							fullWidth
 						/>
 						<TextField name="specialist" label="Specialist" fullWidth />
-						<TextField
-							name="diagnosisCodes"
+						<Select
 							label="Diagnosis codes"
+							name="diagnosisCodes"
+							multiple
 							fullWidth
-						/>
+							value={selectedDiagnoses}
+							onChange={(event) => {
+								const {
+									target: { value },
+								} = event;
+								setSelectedDiagnoses(
+									// On autofill we get a stringified value.
+									typeof value === "string" ? value.split(",") : value,
+								);
+							}}
+						>
+							{diagnoses.map((diagnosis) => (
+								<MenuItem key={diagnosis.code} value={diagnosis.code}>
+									{diagnosis.code}
+								</MenuItem>
+							))}
+						</Select>
 						<Divider />
 						<Select
 							label="Type"
@@ -116,14 +150,22 @@ export function AddEntryForm({
 							))}
 						</Select>
 						{entryType === EntryType.HealthCheck ? (
-							<TextField
+							<Select
+								label="Healthcheck rating"
 								name="healthCheckRating"
-								label="Healthcheck Rating"
+								defaultValue={HealthCheckRating.Healthy}
 								fullWidth
-							/>
+							>
+								{Object.entries(HealthCheckRating).map(([label, value]) => (
+									<MenuItem key={value} value={value}>
+										{label}
+									</MenuItem>
+								))}
+							</Select>
 						) : entryType === EntryType.Hospital ? (
 							<>
 								<TextField
+									type="date"
 									name="date"
 									label="Discharde date"
 									placeholder="YYYY-MM-DD"
@@ -143,12 +185,14 @@ export function AddEntryForm({
 									fullWidth
 								/>
 								<TextField
+									type="date"
 									name="startDate"
 									label="Sickleave start date"
 									placeholder="YYYY-MM-DD"
 									fullWidth
 								/>
 								<TextField
+									type="date"
 									name="endDate"
 									label="Sickleave end date"
 									placeholder="YYYY-MM-DD"

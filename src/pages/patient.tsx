@@ -99,6 +99,7 @@ export function PatientPage() {
 					<EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
 				))}
 				<AddEntryModal
+					diagnoses={diagnoses}
 					isOpen={modalOpen}
 					onSubmit={addPatientEntry}
 					error={addEntryErrorMessage}
