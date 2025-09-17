@@ -1,6 +1,11 @@
 import axios from "axios";
 import { apiBaseUrl } from "../lib/constants.ts";
-import type { Patient, PatientFormValues } from "../lib/types.ts";
+import type {
+	Entry,
+	EntryFormValues,
+	Patient,
+	PatientFormValues,
+} from "../lib/types.ts";
 
 export const patientService = {
 	findAll: async () => {
@@ -16,6 +21,14 @@ export const patientService = {
 	createOne: async (object: PatientFormValues) => {
 		const { data } = await axios.post<Patient>(
 			`${apiBaseUrl}/patients`,
+			object,
+		);
+
+		return data;
+	},
+	createEntry: async (id: Patient["id"], object: EntryFormValues) => {
+		const { data } = await axios.post<Entry>(
+			`${apiBaseUrl}/patients/${id}/entries`,
 			object,
 		);
 
