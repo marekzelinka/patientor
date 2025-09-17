@@ -4,6 +4,53 @@ export interface Diagnosis {
 	latin?: string;
 }
 
+type EntryType = "Hospital" | "OccupationalHealthcare" | "HealthCheck";
+
+interface BaseEntry {
+	id: string;
+	description: string;
+	date: string;
+	specialist: string;
+	diagnosisCodes?: Diagnosis["code"][];
+	type: EntryType;
+}
+
+interface HospitalEntry extends BaseEntry {
+	type: "Hospital";
+	discharge: {
+		date: string;
+		criteria: string;
+	};
+}
+
+interface OccupationalHealthcareEntry extends BaseEntry {
+	type: "OccupationalHealthcare";
+	employerName: string;
+	sickLeave?: {
+		startDate: string;
+		endDate: string;
+	};
+}
+
+export const HealthCheckRating = {
+	Healthy: 0,
+	LowRisk: 1,
+	HighRisk: 2,
+	CriticalRisk: 3,
+};
+export type HealthCheckRating =
+	(typeof HealthCheckRating)[keyof typeof HealthCheckRating];
+
+interface HealthCheckEntry extends BaseEntry {
+	type: "HealthCheck";
+	healthCheckRating: HealthCheckRating;
+}
+
+export type Entry =
+	| HospitalEntry
+	| OccupationalHealthcareEntry
+	| HealthCheckEntry;
+
 export const Gender = {
 	Male: "male",
 	Female: "female",
@@ -18,6 +65,7 @@ export interface Patient {
 	gender: Gender;
 	ssn?: string;
 	dateOfBirth?: string;
+	entries?: Entry[];
 }
 
 export type PatientFormValues = Omit<Patient, "id" | "entries">;

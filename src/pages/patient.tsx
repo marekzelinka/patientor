@@ -16,23 +16,40 @@ export function PatientPage() {
 	}, [id]);
 
 	return (
-		<Box>
-			<Stack marginTop={4} direction="row" alignItems="center" spacing={1}>
-				<Typography variant="h6">{patient?.name} </Typography>
-				{patient?.gender === "male" ? (
-					<Male />
-				) : patient?.gender === "female" ? (
-					<Female />
-				) : (
-					<QuestionMark />
-				)}
+		<Stack marginTop={4} spacing={6}>
+			<Stack spacing={2}>
+				<Stack direction="row" alignItems="center" spacing={1}>
+					<Typography variant="h6">{patient?.name} </Typography>
+					{patient?.gender === "male" ? (
+						<Male />
+					) : patient?.gender === "female" ? (
+						<Female />
+					) : (
+						<QuestionMark />
+					)}
+				</Stack>
+				<dl>
+					<dt>SSN</dt>
+					<dd>{patient?.ssn}</dd>
+					<dt>Occupation</dt>
+					<dd>{patient?.occupation}</dd>
+				</dl>
 			</Stack>
-			<dl>
-				<dt>SSN</dt>
-				<dd>{patient?.ssn}</dd>
-				<dt>Occupation</dt>
-				<dd>{patient?.occupation}</dd>
-			</dl>
-		</Box>
+			<Stack spacing={2}>
+				<Typography fontWeight="600">Entries</Typography>
+				{patient?.entries?.map((entry) => (
+					<Stack key={entry.id}>
+						<Box>
+							{entry.date} {entry.description}
+						</Box>
+						<ul>
+							{entry.diagnosisCodes?.map((diagnosisCode) => (
+								<li key={diagnosisCode}>{diagnosisCode}</li>
+							))}
+						</ul>
+					</Stack>
+				))}
+			</Stack>
+		</Stack>
 	);
 }
