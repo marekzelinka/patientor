@@ -21,7 +21,7 @@ export function AddEntryModal({
 }) {
 	return (
 		<Dialog fullWidth open={isOpen} onClose={onClose}>
-			<DialogTitle>Add a Health Check entry</DialogTitle>
+			<DialogTitle>Add a new patient entry</DialogTitle>
 			<Divider />
 			<DialogContent>
 				{error ? <Alert severity="error">{error}</Alert> : null}

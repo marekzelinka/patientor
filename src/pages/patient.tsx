@@ -38,7 +38,7 @@ export function PatientPage() {
 		setAddEntryErrorMessage(undefined);
 	};
 
-	const addPatient = async (values: EntryFormValues) => {
+	const addPatientEntry = async (values: EntryFormValues) => {
 		try {
 			if (!patient) {
 				return;
@@ -100,7 +100,7 @@ export function PatientPage() {
 				))}
 				<AddEntryModal
 					isOpen={modalOpen}
-					onSubmit={addPatient}
+					onSubmit={addPatientEntry}
 					error={addEntryErrorMessage}
 					onClose={closeModal}
 				/>

@@ -8,7 +8,12 @@ export interface Diagnosis {
 	latin?: string;
 }
 
-type EntryType = "Hospital" | "OccupationalHealthcare" | "HealthCheck";
+export const EntryType = {
+	Hospital: "Hospital",
+	OccupationalHealthcare: "OccupationalHealthcare",
+	HealthCheck: "HealthCheck",
+} as const;
+export type EntryType = (typeof EntryType)[keyof typeof EntryType];
 
 interface BaseEntry {
 	id: string;
